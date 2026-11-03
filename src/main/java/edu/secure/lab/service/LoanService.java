@@ -102,7 +102,19 @@ public class LoanService {
         // Step 4. 마지막에 .longValueExact() 를 붙여 long 타입으로 반환하세요.
         // =====================================================================
 
-        return 0L; // TODO: 이 줄을 지우고 위 Step 1~4를 연결한 계산식을 반환하세요.
+        // return 0L; // TODO: 이 줄을 지우고 위 Step 1~4를 연결한 계산식을 반환하세요.
+        BigDecimal rate = new BigDecimal(annualRate);
+        if (principal <= 0) {
+            throw new IllegalArgumentException("원금은 0보다 커야 합니다.");
+        }
+        if (rate.signum() < 0 || rate.compareTo(BigDecimal.ONE) > 0) {
+            throw new IllegalArgumentException("금리는 0 이상 1 이하여야 합니다.");
+        }
+        
+        return BigDecimal.valueOf(principal)
+				        .multiply(rate)
+				        .divide(BigDecimal.valueOf(12), 0, RoundingMode.DOWN)
+				        .longValueExact();
     }
 
     private static void sleep(long millis) {
